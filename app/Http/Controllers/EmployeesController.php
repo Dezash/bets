@@ -56,7 +56,7 @@ class EmployeesController extends Controller
             $request->input('birth_date')
         ]);
 
-        return redirect('/employees')->with('success', "Darbuotojas sukurtas");
+        return redirect('/employees')->with('success', "Employee created");
     }
 
     /**
@@ -114,7 +114,7 @@ class EmployeesController extends Controller
             $request->input('created_at'),
             $id]);
 
-        return redirect('/employees')->with('success', "Darbuotojas atnaujintas");
+        return redirect('/employees')->with('success', "Employee updated");
     }
 
     /**
