@@ -35,6 +35,11 @@ Route::resource('payouts', 'PayoutsController', [
 ]);
 Route::get('/payouts/{id}/delete', 'PayoutsController@delete');
 
+Route::resource('sports', 'SportController', [
+    'as' => 'sports'
+]);
+Route::get('/sports/{id}/delete', 'SportController@delete');
+
 
 Auth::routes();
 

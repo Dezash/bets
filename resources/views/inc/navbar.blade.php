@@ -15,6 +15,9 @@
         <li class="nav-item {{ Route::is('payouts.*') ? 'active' : '' }}">
           <a class="nav-link" href="/payouts">Payouts</a>
         </li>
+        <li class="nav-item {{ Route::is('sports.*') ? 'active' : '' }}">
+          <a class="nav-link" href="/sports">Sports</a>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
