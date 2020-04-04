@@ -58,6 +58,11 @@ Route::resource('players', 'PlayerController', [
 ]);
 Route::get('/players/{id}/delete', 'PlayerController@delete');
 
+Route::resource('receipts', 'ReceiptController', [
+    'as' => 'receipts'
+]);
+Route::get('/receipts/{id}/delete', 'ReceiptController@delete');
+
 Auth::routes();
 
 
