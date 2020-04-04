@@ -109,4 +109,30 @@ class SportController extends Controller
         DB::delete("DELETE FROM sports WHERE id = ?", [$id]);
         return redirect('/sports')->with('success', 'Sport deleted');
     }
+
+
+    public function getSports(Request $request){
+
+        $search = $request->search;
+  
+        if($search == '')
+        {
+           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
+           $sports = DB::select('SELECT id, `name` FROM sports ORDER BY `name` ASC LIMIT 5');
+        }
+        else
+        {
+           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
+           $sports = DB::select("SELECT id, `name` FROM sports WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+        }
+  
+        $response = array();
+        foreach($sports as $sport)
+        {
+           $response[] = ["value" => $sport->id, "label" => $sport->name];
+        }
+  
+        echo json_encode($response);
+        exit;
+     }
 }

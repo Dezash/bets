@@ -39,7 +39,12 @@ Route::resource('sports', 'SportController', [
     'as' => 'sports'
 ]);
 Route::get('/sports/{id}/delete', 'SportController@delete');
+Route::post('/sportsearch', 'SportController@getSports')->name('sports.search');
 
+Route::resource('leagues', 'LeagueController', [
+    'as' => 'leagues'
+]);
+Route::get('/leagues/{id}/delete', 'LeagueController@delete');
 
 Auth::routes();
 
