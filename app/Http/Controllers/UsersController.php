@@ -98,4 +98,30 @@ class UsersController extends Controller
         DB::delete("DELETE FROM users WHERE id = ?", [$id]);
         return redirect('/users')->with('success', 'User deleted');
     }
+
+
+    public function getUsers(Request $request){
+
+        $search = $request->search;
+  
+        if($search == '')
+        {
+           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
+           $users = DB::select('SELECT id, `name` FROM users ORDER BY `name` ASC LIMIT 5');
+        }
+        else
+        {
+           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
+           $users = DB::select("SELECT id, `name` FROM users WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+        }
+  
+        $response = array();
+        foreach($users as $user)
+        {
+           $response[] = ["value" => $user->id, "label" => $user->name];
+        }
+  
+        echo json_encode($response);
+        exit;
+     }
 }
