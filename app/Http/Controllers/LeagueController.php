@@ -125,4 +125,30 @@ class LeagueController extends Controller
         DB::delete("DELETE FROM leagues WHERE id = ?", [$id]);
         return redirect('/leagues')->with('success', 'League deleted');
     }
+
+
+    public function getLeagues(Request $request){
+
+        $search = $request->search;
+  
+        if($search == '')
+        {
+           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
+           $leagues = DB::select('SELECT id, `name` FROM leagues ORDER BY `name` ASC LIMIT 5');
+        }
+        else
+        {
+           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
+           $leagues = DB::select("SELECT id, `name` FROM leagues WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+        }
+  
+        $response = array();
+        foreach($leagues as $league)
+        {
+           $response[] = ["value" => $league->id, "label" => $league->name];
+        }
+  
+        echo json_encode($response);
+        exit;
+     }
 }

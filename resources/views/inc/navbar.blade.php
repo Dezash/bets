@@ -19,7 +19,10 @@
           <a class="nav-link" href="/sports">Sports</a>
         </li>
         <li class="nav-item {{ Route::is('leagues.*') ? 'active' : '' }}">
-          <a class="nav-link" href="/leagues">League</a>
+          <a class="nav-link" href="/leagues">Leagues</a>
+        </li>
+        <li class="nav-item {{ Route::is('teams.*') ? 'active' : '' }}">
+          <a class="nav-link" href="/teams">Teams</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
