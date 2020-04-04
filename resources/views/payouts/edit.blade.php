@@ -8,9 +8,9 @@
             {{Form::text('user_name', $payout->user_name, ['class' => 'form-control', 'id' => 'search', 'placeholder' => 'User', 'required'])}}
             {{Form::hidden('user_id', $payout->user_id, ['id' => 'searchID'])}}
             {{Form::label('sum', "Sum")}}
-            {{Form::text('sum', $payout->sum, ['class' => 'form-control', 'placeholder' => 'Sum', 'required'])}}
+            {{Form::number('sum', $payout->sum, ['class' => 'form-control', 'placeholder' => 'Sum', 'step' => 'any', 'required'])}}
             {{Form::label('fee', "Fee")}}
-            {{Form::text('fee', $payout->fee, ['class' => 'form-control', 'placeholder' => 'Fee', 'required'])}}
+            {{Form::number('fee', $payout->fee, ['class' => 'form-control', 'placeholder' => 'Fee', 'step' => 'any', 'required'])}}
             {{Form::label('bank_account', "IBAN")}}
             {{Form::text('bank_account', $payout->bank_account, ['class' => 'form-control', 'required'])}}
             {{Form::label('payout_date', "Payout date")}}

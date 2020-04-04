@@ -47,13 +47,7 @@ class PayoutsController extends Controller
             'fee' => ['required', 'numeric', 'min:0'],
             'bank_account' => ['required']
         ]);
-
-        /*$employee = new Employee();
-        $employee->first_name = $request->input('first_name');
-        $employee->last_name = $request->input('last_name');
-        $employee->birth_date = $request->input('birth_date');
-        $employee->save();*/
-
+    
         DB::insert("INSERT INTO payouts (user_id, sum, fee, bank_account, payout_date, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())", [
             $request->input('user_id'),
             $request->input('sum'),

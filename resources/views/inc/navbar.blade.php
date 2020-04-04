@@ -24,6 +24,9 @@
         <li class="nav-item {{ Route::is('teams.*') ? 'active' : '' }}">
           <a class="nav-link" href="/teams">Teams</a>
         </li>
+        <li class="nav-item {{ Route::is('players.*') ? 'active' : '' }}">
+          <a class="nav-link" href="/players">Players</a>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">

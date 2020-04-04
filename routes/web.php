@@ -53,6 +53,11 @@ Route::resource('teams', 'TeamController', [
 Route::get('/teams/{id}/delete', 'TeamController@delete');
 Route::post('/teamsearch', 'TeamController@getTeams')->name('teams.search');
 
+Route::resource('players', 'PlayerController', [
+    'as' => 'players'
+]);
+Route::get('/players/{id}/delete', 'PlayerController@delete');
+
 Auth::routes();
 
 
