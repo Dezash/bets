@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="Width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/css/app.css">
+        <script src="/js/app.js"></script> 
         <title>{{config('app.name', 'LSAPP')}}</title>
     </head>
     <body>
