@@ -16,3 +16,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::resource('employees', 'EmployeesController', [
+    'as' => 'employees'
+]);
+Route::get('/employees/{id}/delete', 'EmployeesController@delete');
+Route::resource('users', 'UsersController', [
+    'as' => 'users'
+]);
+Route::get('/users/{id}/delete', 'UsersController@delete');
+
+
+Auth::routes();
+
+
+Route::get('/home', 'HomeController@index')->name('home');
