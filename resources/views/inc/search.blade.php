@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript">
 
 // CSRF Token
@@ -7,7 +10,7 @@ $(document).ready(function(){
   $("#search").autocomplete({
     source: function( request, response ) {
       $.ajax({
-        url:"{{route('users.search')}}",
+        url:"{{route($routeName)}}",
         type: 'post',
         dataType: "json",
         data: {

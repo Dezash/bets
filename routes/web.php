@@ -22,10 +22,18 @@ Route::resource('employees', 'EmployeesController', [
     'as' => 'employees'
 ]);
 Route::get('/employees/{id}/delete', 'EmployeesController@delete');
+
 Route::resource('users', 'UsersController', [
     'as' => 'users'
 ]);
 Route::get('/users/{id}/delete', 'UsersController@delete');
+Route::post('/usersearch', 'UsersController@getUsers')->name('users.search');
+
+
+Route::resource('payouts', 'PayoutsController', [
+    'as' => 'payouts'
+]);
+Route::get('/payouts/{id}/delete', 'PayoutsController@delete');
 
 
 Auth::routes();

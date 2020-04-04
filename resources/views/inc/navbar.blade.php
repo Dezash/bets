@@ -12,8 +12,8 @@
         <li class="nav-item {{ Route::is('users.*') ? 'active' : '' }}">
           <a class="nav-link" href="/users">Users</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Disabled</a>
+        <li class="nav-item {{ Route::is('payouts.*') ? 'active' : '' }}">
+          <a class="nav-link" href="/payouts">Payouts</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
