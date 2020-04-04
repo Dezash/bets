@@ -19,6 +19,18 @@ class UsersController extends Controller
         return view('users.index')->with('users', $users)->with('payment_types', config('enums.payment_types'));
     }
 
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $query = DB::select("SELECT * FROM users WHERE id = ?", [$id])[0];
+        return view('users.show')->with('user', compact('query')['query']);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

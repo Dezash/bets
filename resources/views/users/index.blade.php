@@ -24,7 +24,7 @@
             <tbody>
             @foreach($users as $user)
                 <tr>
-                    <th scope="row">{{$user->id}}</th>
+                    <th scope="row"><a href="/users/{{$user->id}}">{{$user->id}}</a></th>
                     <th>{{$user->first_name}}</th>
                     <th>{{$user->last_name}}</th>
                     <th>{{$user->email}}</th>
