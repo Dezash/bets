@@ -1,16 +1,16 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">{{config('app.name')}}</a>
+    <a class="navbar-brand" href="/">{{config('app.name')}}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/employees">Darbuotojai <span class="sr-only">(current)</span></a>
+        <li class="nav-item {{ Route::is('employees.*') ? 'active' : '' }}">
+          <a class="nav-link" href="/employees">Employees</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+        <li class="nav-item {{ Route::is('users.*') ? 'active' : '' }}">
+          <a class="nav-link" href="/users">Users</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Disabled</a>
