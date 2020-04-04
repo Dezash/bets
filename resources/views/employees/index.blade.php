@@ -24,7 +24,7 @@
                 <th>{{$employee->birth_date}}</th>
                 <th>{{date('Y-m-d', strtotime($employee->created_at))}}</th>
                 <th><a href="/employees/{{$employee->id}}/edit">Koreguoti</a></th>
-                <th><a href="/employees/{{$employee->id}}/edit">Trinti</a></th>
+                <th><a href="/employees/{{$employee->id}}/delete">Trinti</a></th>
             </tr>
         @endforeach
         </tbody>

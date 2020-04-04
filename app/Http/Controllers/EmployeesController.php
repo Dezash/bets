@@ -126,6 +126,12 @@ class EmployeesController extends Controller
     public function destroy($id)
     {
         DB::delete("DELETE FROM employees WHERE id = ?", [$id]);
-        return redirect('/employees')->with('success', 'Darbuotojas ištrintas');
+        return redirect('/employees')->with('success', 'Employee deleted');
+    }
+
+    public function delete($id)
+    {
+        DB::delete("DELETE FROM employees WHERE id = ?", [$id]);
+        return redirect('/employees')->with('success', 'Employee deleted');
     }
 }
