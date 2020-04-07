@@ -69,6 +69,12 @@ Route::resource('cities', 'CityController', [
 Route::get('/cities/{id}/delete', 'CityController@delete');
 Route::post('/citysearch', 'CityController@getCities')->name('cities.search');
 
+Route::resource('shops', 'ShopController', [
+    'as' => 'shops'
+]);
+Route::get('/shops/{id}/delete', 'ShopController@delete');
+Route::post('/shopsearch', 'ShopController@getShops')->name('shops.search');
+
 Auth::routes();
 
 

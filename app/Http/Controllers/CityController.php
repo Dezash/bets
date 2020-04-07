@@ -117,7 +117,7 @@ class CityController extends Controller
     }
 
 
-    public function getSports(Request $request){
+    public function getCities(Request $request){
 
         $search = $request->search;
   
