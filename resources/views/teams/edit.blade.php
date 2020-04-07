@@ -7,11 +7,11 @@
             {{Form::label('name', "Name")}}
             {{Form::text('name', $team->name, ['class' => 'form-control', 'required'])}}
             {{Form::label('league_name', 'League')}}
-            {{Form::text('league_name', $team->league_name, ['class' => 'form-control', 'id' => 'search', 'placeholder' => 'Search', 'required'])}}
-            {{Form::hidden('league_id', $team->league_id, ['id' => 'searchID'])}}
+            {{Form::text('league_name', $team->league_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('leagues.search'), 'data-updatefield' => 'leagueID', 'required'])}}
+            {{Form::hidden('league_id', $team->league_id, ['id' => 'leagueID'])}}
         </div>
         {{Form::hidden('_method', 'PUT')}}
         {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
     {{ Form::close() }}
-    @include('inc/search', ['routeName' => 'leagues.search'])
+    @include('inc/search')
 @endsection

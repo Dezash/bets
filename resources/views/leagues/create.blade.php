@@ -13,12 +13,12 @@
             {{Form::label('ties', "Ties")}}
             {{Form::number('ties', '0', ['class' => 'form-control', 'min' => '0', 'required'])}}
             {{Form::label('search_box', 'Sport')}}
-            {{Form::text('search_box', '', ['class' => 'form-control', 'id' => 'search', 'placeholder' => 'Search', 'required'])}}
-            {{Form::hidden('sport_id', '', ['id' => 'searchID'])}}
+            {{Form::text('search_box', '', ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('sports.search'), 'data-updatefield' => 'sportID', 'required'])}}
+            {{Form::hidden('sport_id', '', ['id' => 'sportID'])}}
         </div>
         {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
     {{ Form::close() }}
       
-    @include('inc/search', ['routeName' => 'sports.search'])
+    @include('inc/search')
 
 @endsection

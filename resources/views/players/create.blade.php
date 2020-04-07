@@ -5,8 +5,8 @@
     {{ Form::open(['action' => 'PlayerController@store', 'method' => 'POST']) }}
         <div class="form-group">
             {{Form::label('search_box', 'Team')}}
-            {{Form::text('search_box', '', ['class' => 'form-control', 'id' => 'search', 'placeholder' => 'Search', 'required'])}}
-            {{Form::hidden('team_id', '', ['id' => 'searchID'])}}
+            {{Form::text('search_box', '', ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'teamID', 'required'])}}
+            {{Form::hidden('team_id', '', ['id' => 'teamID'])}}
             {{Form::label('first_name', 'First name')}}
             {{Form::text('first_name', '', ['class' => 'form-control'])}}
             {{Form::label('last_name', 'Last name')}}
@@ -17,6 +17,6 @@
         {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
     {{ Form::close() }}
       
-    @include('inc/search', ['routeName' => 'teams.search'])
+    @include('inc/search')
 
 @endsection

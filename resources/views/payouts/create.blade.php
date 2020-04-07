@@ -5,8 +5,8 @@
     {{ Form::open(['action' => 'PayoutsController@store', 'method' => 'POST']) }}
         <div class="form-group">
             {{Form::label('search_box', 'User')}}
-            {{Form::text('search_box', '', ['class' => 'form-control', 'id' => 'search', 'placeholder' => 'Search', 'required'])}}
-            {{Form::hidden('user_id', '', ['id' => 'searchID'])}}
+            {{Form::text('search_box', '', ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('users.search'), 'data-updatefield' => 'userID', 'required'])}}
+            {{Form::hidden('user_id', '', ['id' => 'userID'])}}
             {{Form::label('sum', "Sum")}}
             {{Form::number('sum', '', ['class' => 'form-control', 'step' => 'any', 'min' => '0', 'required'])}}
             {{Form::label('fee', "Fee")}}
@@ -17,6 +17,6 @@
         {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
     {{ Form::close() }}
       
-    @include('inc/search', ['routeName' => 'users.search'])
+    @include('inc/search')
 
 @endsection
