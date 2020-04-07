@@ -63,6 +63,12 @@ Route::resource('receipts', 'ReceiptController', [
 ]);
 Route::get('/receipts/{id}/delete', 'ReceiptController@delete');
 
+Route::resource('cities', 'CityController', [
+    'as' => 'cities'
+]);
+Route::get('/cities/{id}/delete', 'CityController@delete');
+Route::post('/citysearch', 'CityController@getCities')->name('cities.search');
+
 Auth::routes();
 
 
