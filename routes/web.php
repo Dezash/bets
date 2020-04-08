@@ -75,6 +75,12 @@ Route::resource('shops', 'ShopController', [
 Route::get('/shops/{id}/delete', 'ShopController@delete');
 Route::post('/shopsearch', 'ShopController@getShops')->name('shops.search');
 
+Route::resource('matches', 'MatchController', [
+    'as' => 'matches'
+]);
+Route::get('/matches/{id}/delete', 'MatchController@delete');
+Route::post('/matchsearch', 'MatchController@getMatches')->name('matches.search');
+
 Auth::routes();
 
 
