@@ -48,13 +48,19 @@ class LeagueController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $rules = [
             'name' => ['required'],
             'wins' => ['required', 'numeric'],
             'losses' => ['required', 'numeric'],
             'ties' => ['required', 'numeric'],
-            'sport_id' => ['required', 'numeric'],
-        ]);
+            'sport_id' => ['required', 'numeric']
+        ];
+
+        foreach($request->teamname as $key => $value){
+            $rules["teamname.{$key}"] = 'required';
+        }
+
+        $this->validate($request, $rules);
 
         DB::insert("INSERT INTO leagues (`name`, wins, losses, ties, sport_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())", [
             $request->input('name'),
@@ -63,6 +69,15 @@ class LeagueController extends Controller
             $request->input('ties'),
             $request->input('sport_id')
         ]);
+
+        $query = DB::select("SELECT LAST_INSERT_ID() AS league_id;")[0];
+
+        foreach($request->teamname as $key => $value){
+            DB::insert("INSERT INTO teams (`league_id`, `name`, created_at, updated_at) VALUES (?, ?, NOW(), NOW())", [
+                $query->league_id,
+                $value
+            ]);
+        }
 
         return redirect('/leagues')->with('success', "League created");
     }

@@ -48,15 +48,34 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $rules = [
             'name' => ['required'],
             'league_id' => ['required', 'numeric'],
-        ]);
+        ];
+
+        foreach($request->first_name as $key => $value){
+            $rules["first_name.{$key}"] = 'required';
+            $rules["last_name.{$key}"] = 'required';
+            $rules["country.{$key}"] = 'required';
+        }
+
+        $this->validate($request, $rules);
 
         DB::insert("INSERT INTO teams (`name`, league_id, created_at, updated_at) VALUES (?, ?, NOW(), NOW())", [
             $request->input('name'),
             $request->input('league_id')
         ]);
+
+        $query = DB::select("SELECT LAST_INSERT_ID() AS team_id;")[0];
+
+        foreach($request->first_name as $key => $value){
+            DB::insert("INSERT INTO players (team_id, first_name, last_name, country, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())", [
+                $query->team_id,
+                $value,
+                $request->last_name[$key],
+                $request->country[$key]
+            ]);
+        }
 
         return redirect('/teams')->with('success', "Team created");
     }

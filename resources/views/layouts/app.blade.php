@@ -8,6 +8,8 @@
         <link rel="stylesheet" href="/css/app.css">
         <script src="/js/app.js"></script> 
         <title>{{config('app.name', 'LSAPP')}}</title>
+        <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
         @include('inc/navbar')
