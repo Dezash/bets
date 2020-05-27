@@ -81,6 +81,8 @@ Route::resource('matches', 'MatchController', [
 Route::get('/matches/{id}/delete', 'MatchController@delete');
 Route::post('/matchsearch', 'MatchController@getMatches')->name('matches.search');
 
+Route::get('/bets/report', 'BetController@report');
+Route::post('/bets/report', 'BetController@getReport');
 Route::resource('bets', 'BetController', [
     'as' => 'bets'
 ]);

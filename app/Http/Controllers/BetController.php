@@ -135,4 +135,100 @@ class BetController extends Controller
         DB::delete("DELETE FROM bets WHERE id = ?", [$id]);
         return redirect('/bets')->with('success', 'Bet deleted');
     }
+
+    public function report()
+    {
+        return view('bets.report');
+    }
+
+    public function getReport(Request $request)
+    {
+        $this->validate($request, [
+            'date_from' => ['required', 'date'],
+            'date_to' => ['required', 'date'],
+        ]);
+
+        $query = DB::select("SELECT
+        users.id,
+        bets.id AS bet_id,
+        bets.created_at,
+        CAST(bets.created_at AS DATE) AS `date`,
+        users.first_name,
+        users.last_name,
+        bets.bet_sum,
+    
+        t.total_bet_sum,
+        t.team_name,
+        IFNULL(t.max_bet, 0) AS max_bet,
+        IFNULL(t.avg_bet, 0) AS avg_bet,
+        IFNULL(s.total_lost, 0) AS total_lost,
+        IFNULL(v.total_paid, 0) AS total_paid
+    FROM
+      bets
+      INNER JOIN users ON users.id = bets.user_id
+      LEFT JOIN matches ON matches.id = bets.match_id
+      LEFT JOIN (
+        SELECT
+          bets.user_id,
+          teams.name AS team_name,
+          SUM(bets.bet_sum) AS total_bet_sum,
+          MAX(bets.bet_sum) AS max_bet,
+          ROUND(AVG(bets.bet_sum), 2) as avg_bet
+        FROM
+          bets
+          INNER JOIN users ON users.id = bets.user_id
+          INNER JOIN teams ON teams.id = bets.team_id
+        WHERE
+          bets.created_at BETWEEN ? AND ?
+        GROUP BY
+          bets.user_id
+      ) t ON t.user_id = users.id
+      LEFT JOIN (
+        SELECT
+          bets.user_id,
+          IFNULL(SUM(bets.bet_sum), 0) as total_lost
+        FROM
+          bets
+          INNER JOIN users ON bets.user_id = users.id
+          LEFT JOIN matches ON matches.id = bets.match_id
+        WHERE
+          bets.created_at BETWEEN ? AND ?
+          AND matches.winning_team != bets.team_id
+        GROUP BY
+          bets.user_id
+      ) s ON s.user_id = users.id
+      LEFT JOIN (
+        SELECT
+          payouts.user_id,
+          IFNULL(SUM(payouts.sum), 0) AS total_paid
+        FROM
+          payouts
+          INNER JOIN users ON payouts.user_id = users.id
+        WHERE
+        payouts.created_at BETWEEN ? AND ?
+        GROUP BY
+          payouts.user_id
+      ) v ON v.user_id = users.id
+    WHERE
+          bets.created_at BETWEEN ? AND ?
+          AND users.id = IFNULL(?, users.id)
+    GROUP BY
+      bets.id
+    ORDER BY
+      users.last_name, created_at
+    ", 
+        [
+            $request->input('date_from'),
+            $request->input('date_to'),
+            $request->input('date_from'),
+            $request->input('date_to'),
+            $request->input('date_from'),
+            $request->input('date_to'),
+            $request->input('date_from'),
+            $request->input('date_to'),
+            $request->input('user_id')
+        ]);
+        //dd($query);
+        return view('bets.report')->with('reports', $query);
+    }
 }
