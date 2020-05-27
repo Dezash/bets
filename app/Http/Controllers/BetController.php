@@ -179,8 +179,7 @@ class BetController extends Controller
           INNER JOIN users ON users.id = bets.user_id
           INNER JOIN teams ON teams.id = bets.team_id
         WHERE
-          bets.created_at >= ?
-          AND bets.created_at <= ?
+          bets.created_at BETWEEN ? AND ?
         GROUP BY
           bets.user_id
       ) t ON t.user_id = users.id
@@ -193,8 +192,7 @@ class BetController extends Controller
           INNER JOIN users ON bets.user_id = users.id
           LEFT JOIN matches ON matches.id = bets.match_id
         WHERE
-          bets.created_at >= ?
-          AND bets.created_at <= ?
+          bets.created_at BETWEEN ? AND ?
           AND matches.winning_team != bets.team_id
         GROUP BY
           bets.user_id
@@ -202,19 +200,17 @@ class BetController extends Controller
       LEFT JOIN (
         SELECT
           payouts.user_id,
-          IFNULL(SUM(payouts.sum), 0) as total_paid
+          IFNULL(SUM(payouts.sum), 0) AS total_paid
         FROM
           payouts
           INNER JOIN users ON payouts.user_id = users.id
         WHERE
-          payouts.created_at >= ?
-          AND payouts.created_at <= ?
+        payouts.created_at BETWEEN ? AND ?
         GROUP BY
           payouts.user_id
       ) v ON v.user_id = users.id
     WHERE
-          bets.created_at >= ?
-          AND bets.created_at <= ?
+          bets.created_at BETWEEN ? AND ?
           AND users.id = IFNULL(?, users.id)
     GROUP BY
       bets.id
