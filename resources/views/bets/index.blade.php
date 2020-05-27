@@ -2,7 +2,10 @@
 
 @section('content')
     <h1>Bets</h1>
-    <a href="/bets/create" class="btn btn-primary float-right">New bet</a>
+    <div class="float-right">
+        <a href="/bets/create" class="btn btn-primary">New bet</a>
+        <a href="/bets/report" class="btn btn-primary">Report</a>
+    </div>
     @if(count($bets) > 0)
     <table class="table">
         <thead>
