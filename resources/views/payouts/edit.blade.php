@@ -5,7 +5,7 @@
     {{ Form::open(['action' => ['PayoutsController@update', $payout->id], 'method' => 'POST']) }}
         <div class="form-group">
             {{Form::label('user_name', 'User')}}
-            {{Form::text('user_name', $payout->user_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('users.search'), 'data-updatefield' => 'userID', 'required'])}}
+            {{Form::text('user_name', $payout->user->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('users.search'), 'data-updatefield' => 'userID', 'required'])}}
             {{Form::hidden('user_id', $payout->user_id, ['id' => 'userID'])}}
             {{Form::label('sum', "Sum")}}
             {{Form::number('sum', $payout->sum, ['class' => 'form-control', 'placeholder' => 'Sum', 'step' => 'any', 'required'])}}

@@ -7,7 +7,7 @@
             {{Form::label('name', "Name")}}
             {{Form::text('name', $team->name, ['class' => 'form-control', 'required'])}}
             {{Form::label('league_name', 'League')}}
-            {{Form::text('league_name', $team->league_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('leagues.search'), 'data-updatefield' => 'leagueID', 'required'])}}
+            {{Form::text('league_name', $team->league->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('leagues.search'), 'data-updatefield' => 'leagueID', 'required'])}}
             {{Form::hidden('league_id', $team->league_id, ['id' => 'leagueID'])}}
         </div>
         {{Form::hidden('_method', 'PUT')}}

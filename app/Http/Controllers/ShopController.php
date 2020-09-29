@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Shop;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
@@ -25,8 +24,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $shops = Shop::select('shops.*', 'cities.name AS city_name', 'depShop.address AS department_address')->join('cities', 'cities.id', '=', 'shops.city_id')->leftJoin('shops AS depShop', 'depShop.id', '=', 'shops.department')->get();
-        return view('shops.index')->with('shops', $shops);
+        return view('shops.index')->with('shops', Shop::all());
     }
 
     /**
@@ -81,7 +79,6 @@ class ShopController extends Controller
      */
     public function edit(Shop $shop)
     {
-        $shop = Shop::select('shops.*', 'cities.name AS city_name', 'depShop.address AS department_address')->join('cities', 'shops.city_id', '=', 'cities.id')->leftJoin('shops AS depShop', 'depShop.id', '=', 'shops.department')->where('shops.id', $shop->id)->first();
         return view('shops.edit')->with('shop', $shop);
     }
 

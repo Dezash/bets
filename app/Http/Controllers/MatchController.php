@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Match;
-use App\Team;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class MatchController extends Controller
 {
@@ -26,15 +24,7 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $matches = Match::select("matches.*", "f_t.name AS first_team_name", "s_t.name AS second_team_name")->join("teams AS f_t", "f_t.id", "=", "first_team")->join("teams AS s_t", "s_t.id", "=", "second_team")->get();
-        foreach($matches as $team)
-        {
-            if (isset($team->winning_team))
-            {
-                $team->winning_team_name = Team::select('name')->where('id', $team->winning_team)->get()[0]->name;
-            }
-        }
-
+        $matches = Match::all();
         return view('matches.index')->with('matches', $matches);
     }
 
@@ -87,9 +77,7 @@ class MatchController extends Controller
      */
     public function edit(Match $match)
     {
-        $obMatch = Match::select('matches.*', 'f_t.name AS first_team_name', 's_t.name AS second_team_name')->join('teams AS f_t', 'f_t.id', '=', 'first_team')->join('teams AS s_t', 's_t.id', '=', 'second_team')->where('matches.id', $match->id)->first();
-
-        return view('matches.edit')->with('match', $obMatch);
+        return view('matches.edit')->with('match', $match);
     }
 
     /**

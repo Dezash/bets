@@ -22,13 +22,13 @@
         @foreach($shops as $shop)
             <tr>
                 <th scope="row">{{$shop->id}}</th>
-                <th>{{$shop->city_name}}</th>
+                <th>{{$shop->city->name}}</th>
                 <th>{{$shop->address}}</th>
                 <th>{{$shop->phone}}</th>
                 <th>{{$shop->email}}</th>
                 <th>{{$shop->opening_time}}</th>
                 <th>{{$shop->closing_time}}</th>
-                <th>{{$shop->department_address ?? "N/A"}}</th>
+                <th>{{$shop->department->address ?? "N/A"}}</th>
                 
                 <th><a href="/shops/{{$shop->id}}/edit">Edit</a></th>
                 <th><a href="/shops/{{$shop->id}}/delete">Delete</a></th>

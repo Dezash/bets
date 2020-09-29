@@ -13,7 +13,7 @@
             {{Form::label('ties', "Ties")}}
             {{Form::number('ties', $league->ties, ['class' => 'form-control', 'min:0', 'required'])}}
             {{Form::label('sport_name', 'Sport')}}
-            {{Form::text('sport_name', $league->sport_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('sports.search'), 'data-updatefield' => 'sportID', 'required'])}}
+            {{Form::text('sport_name', $league->sport->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('sports.search'), 'data-updatefield' => 'sportID', 'required'])}}
             {{Form::hidden('sport_id', $league->sport_id, ['id' => 'sportID'])}}
         </div>
         {{Form::hidden('_method', 'PUT')}}

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Payout;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PayoutsController extends Controller
 {
@@ -26,7 +25,7 @@ class PayoutsController extends Controller
      */
     public function index()
     {
-        $payouts = Payout::select('payouts.*', 'users.name AS user_name')->join('users', 'payouts.user_id', '=', 'users.id')->get();
+        $payouts = Payout::all();
         return view('payouts.index')->with('payouts', $payouts);
     }
 

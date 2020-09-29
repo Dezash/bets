@@ -10,14 +10,14 @@
             {{Form::input('dateTime-local', 'match_end', date('Y-m-d\TH:i:s', strtotime($match->match_end)), ['class' => 'form-control', 'required'])}}
 
             {{Form::label('search_box', 'First team')}}
-            {{Form::text('search_box', $match->first_team_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'firstTeamID', 'required'])}}
+            {{Form::text('search_box', $match->firstTeam->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'firstTeamID', 'required'])}}
             {{Form::hidden('first_team', $match->first_team, ['id' => 'firstTeamID'])}}
 
             {{Form::label('first_team_score', "First team score")}}
             {{Form::number('first_team_score', $match->first_team_score, ['class' => 'form-control', 'required'])}}
 
             {{Form::label('search_box', 'Second team')}}
-            {{Form::text('search_box', $match->second_team_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'secondTeamID', 'required'])}}
+            {{Form::text('search_box', $match->secondTeam->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'secondTeamID', 'required'])}}
             {{Form::hidden('second_team', $match->second_team, ['id' => 'secondTeamID'])}}
 
             {{Form::label('second_team_score', "Second team score")}}

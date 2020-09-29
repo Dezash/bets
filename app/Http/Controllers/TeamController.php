@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Team;
 use App\Player;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TeamController extends Controller
 {
@@ -27,8 +26,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::select('teams.*', 'leagues.name AS league_name')->join('leagues', 'teams.league_id', '=', 'leagues.id')->get();
-        return view('teams.index')->with('teams', $teams);
+        return view('teams.index')->with('teams', Team::all());
     }
 
     /**
@@ -96,7 +94,6 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        $team = Team::select('teams.*', 'leagues.name AS league_name')->join('leagues', 'teams.league_id', '=', 'leagues.id')->where('teams.id', $team->id)->get();
         return view('teams.edit')->with('team', $team);
     }
 

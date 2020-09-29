@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Player;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PlayerController extends Controller
 {
@@ -26,7 +25,7 @@ class PlayerController extends Controller
      */
     public function index()
     {
-        $players = Player::select('players.*', 'teams.name AS team_name')->join('teams', 'players.team_id', '=', 'teams.id')->get();
+        $players = Player::all();
         return view('players.index')->with('players', $players);
     }
 

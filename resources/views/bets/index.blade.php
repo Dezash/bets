@@ -26,8 +26,8 @@
                 <th scope="row">{{$bet->id}}</th>
                 <th>{{$bet->match_id}}</th>
                 <th>{{$bet->receipt_id}}</th>
-                <th>{{$bet->team_name}}</th>
-                <th><a href="/users/{{$bet->user_id}}">{{$bet->user_name}}</a></th>
+                <th>{{$bet->team->name}}</th>
+                <th><a href="/users/{{$bet->user_id}}">{{$bet->user->name}}</a></th>
                 <th>€{{$bet->bet_sum}}</th>
                 <th>{{$bet->created_at}}</th>
                 <th><a href="/bets/{{$bet->id}}/edit">Edit</a></th>

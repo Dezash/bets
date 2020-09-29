@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Receipt;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReceiptController extends Controller
 {

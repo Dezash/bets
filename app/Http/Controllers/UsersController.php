@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -26,8 +25,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index')->with('users', $users)->with('payment_types', config('enums.payment_types'));
+        return view('users.index')->with('users', User::all())->with('payment_types', config('enums.payment_types'));
     }
 
         /**
@@ -36,9 +34,8 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::find($id);
         return view('users.show')->with('user', $user);
     }
 

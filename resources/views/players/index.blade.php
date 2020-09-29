@@ -19,7 +19,7 @@
         @foreach($players as $player)
             <tr>
                 <th scope="row">{{$player->id}}</th>
-                <th>{{$player->team_name}}</th>
+                <th>{{$player->team->name}}</th>
                 <th>{{$player->first_name}}</th>
                 <th>{{$player->last_name}}</th>
                 <th>{{$player->country}}</th>
