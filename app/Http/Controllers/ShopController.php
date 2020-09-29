@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Shop;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller

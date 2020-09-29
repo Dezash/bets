@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,16 +15,16 @@ class Match extends Model
 
     public function firstTeam()
     {
-        return $this->belongsTo('App\Team', 'first_team');
+        return $this->belongsTo('App\Models\Team', 'first_team');
     }
 
     public function secondTeam()
     {
-        return $this->belongsTo('App\Team', 'second_team');
+        return $this->belongsTo('App\Models\Team', 'second_team');
     }
 
     public function winningTeam()
     {
-        return $this->belongsTo('App\Team', 'winning_team');
+        return $this->belongsTo('App\Models\Team', 'winning_team');
     }
 }
