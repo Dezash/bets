@@ -42,6 +42,7 @@
             </tbody>
         </table>
     </div>
+    {{ $users->links() }}
     @else
         <p>No users found</p>
     @endif

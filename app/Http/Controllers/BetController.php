@@ -27,7 +27,7 @@ class BetController extends Controller
    */
   public function index()
   {
-    $bets = Bet::all();
+    $bets = Bet::paginate(15);
     return view('bets.index')->with('bets', $bets);
   }
 

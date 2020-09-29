@@ -29,6 +29,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $players->links() }}
     @else
         <p>No player records found</p>
     @endif

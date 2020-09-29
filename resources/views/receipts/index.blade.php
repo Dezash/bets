@@ -29,6 +29,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $receipts->links() }}
     @else
         <p>No receipt records found</p>
     @endif

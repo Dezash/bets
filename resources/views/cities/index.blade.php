@@ -23,6 +23,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $cities->links() }}
     @else
         <p>No city records found</p>
     @endif

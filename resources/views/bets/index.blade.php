@@ -36,6 +36,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $bets->links() }}
     @else
         <p>No bet records found</p>
     @endif

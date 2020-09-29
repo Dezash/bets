@@ -31,6 +31,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $matches->links() }}
     @else
         <p>No match records found</p>
     @endif

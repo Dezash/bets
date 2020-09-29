@@ -24,7 +24,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        return view('shops.index')->with('shops', Shop::all());
+        return view('shops.index')->with('shops', Shop::paginate(15));
     }
 
     /**

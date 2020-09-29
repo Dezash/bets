@@ -31,6 +31,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $payouts->links() }}
     @else
         <p>No payout records found</p>
     @endif

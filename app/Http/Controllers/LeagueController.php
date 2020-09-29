@@ -26,7 +26,7 @@ class LeagueController extends Controller
      */
     public function index()
     {
-        $leagues = League::all();
+        $leagues = League::paginate(15);
         return view('leagues.index')->with('leagues', $leagues);
     }
 

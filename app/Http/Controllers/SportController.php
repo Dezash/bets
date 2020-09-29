@@ -25,7 +25,7 @@ class SportController extends Controller
      */
     public function index()
     {
-        return view('sports.index')->with('sports', Sport::all());
+        return view('sports.index')->with('sports', Sport::paginate(15));
     }
 
     /**

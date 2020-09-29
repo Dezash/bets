@@ -25,7 +25,7 @@ class PayoutsController extends Controller
      */
     public function index()
     {
-        $payouts = Payout::all();
+        $payouts = Payout::paginate(15);
         return view('payouts.index')->with('payouts', $payouts);
     }
 

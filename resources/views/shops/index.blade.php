@@ -36,6 +36,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $shops->links() }}
     @else
         <p>No shop records found</p>
     @endif
