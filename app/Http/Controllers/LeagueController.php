@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\League;
-use App\Team;
+use App\Models\League;
+use App\Models\Team;
 use Illuminate\Http\Request;
 
 class LeagueController extends Controller

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Match;
+use App\Models\Match;
 use Illuminate\Http\Request;
 
 class MatchController extends Controller

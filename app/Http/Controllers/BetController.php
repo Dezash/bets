@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Bet;
-use App\Match;
-use App\Receipt;
+use App\Models\Bet;
+use App\Models\Match;
+use App\Models\Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
