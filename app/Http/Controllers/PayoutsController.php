@@ -26,12 +26,8 @@ class PayoutsController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT payouts.*, users.name AS user_name FROM payouts INNER JOIN users ON payouts.user_id = users.id");
-        /*$pdo = DB::connection()->getPdo()->prepare("SELECT payouts.*, users.name AS user_name FROM payouts INNER JOIN users ON payouts.id = users.id");
-        $pdo->execute();
-        $data = $sth->fetchAll(\PDO::FETCH_OBJ);
-        return view('payouts.index')->with('payouts', $data);*/
-        return view('payouts.index')->with('payouts', $query);
+        $payouts = Payout::select('payouts.*', 'users.name AS user_name')->join('users', 'payouts.user_id', '=', 'users.id')->get();
+        return view('payouts.index')->with('payouts', $payouts);
     }
 
     /**
@@ -58,13 +54,8 @@ class PayoutsController extends Controller
             'fee' => ['required', 'numeric', 'min:0'],
             'bank_account' => ['required']
         ]);
-    
-        DB::insert("INSERT INTO payouts (user_id, sum, fee, bank_account, payout_date, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())", [
-            $request->input('user_id'),
-            $request->input('sum'),
-            $request->input('fee'),
-            $request->input('bank_account')
-        ]);
+
+        Payout::create($request->all());
 
         return redirect('/payouts')->with('success', "Payout created");
     }
@@ -88,8 +79,8 @@ class PayoutsController extends Controller
      */
     public function edit(Payout $payout)
     {
-        $query = DB::select("SELECT payouts.*, users.name AS user_name FROM payouts INNER JOIN users ON payouts.user_id = users.id WHERE payouts.id = ?", [$payout->id])[0];
-        return view('payouts.edit')->with('payout', compact('query')['query']);
+        $payout = Payout::select('payouts.*', 'users.name AS user_name')->join('users', 'payouts.user_id', '=', 'users.id')->where('payouts.id', $payout->id)->first();
+        return view('payouts.edit')->with('payout', $payout);
     }
 
     /**
@@ -109,27 +100,20 @@ class PayoutsController extends Controller
             'payout_date' => ['required']
         ]);
 
-        $query = DB::update("UPDATE payouts SET user_id = ?, sum = ?, fee = ?, bank_account = ?, payout_date = ? WHERE id = ?", [
-            $request->input('user_id'),
-            $request->input('sum'),
-            $request->input('fee'),
-            $request->input('bank_account'),
-            $request->input('payout_date'),
-            $payout->id
-            ]);
+        $bSuccess = $payout->update($request->all());
 
-        return redirect('/payouts')->with('success', "Payout updated");
+        return redirect('/payouts')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Payout updated' : 'Failed to update payout');
     }
 
-    public function destroy($id)
+    public function destroy(Payout $payout)
     {
-        DB::delete("DELETE FROM payouts WHERE id = ?", [$id]);
+        $payout->delete();
         return redirect('/payouts')->with('success', 'Payout deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM payouts WHERE id = ?", [$id]);
+        Payout::destroy($id);
         return redirect('/payouts')->with('success', 'Payout deleted');
     }
 }

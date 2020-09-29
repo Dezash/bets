@@ -26,8 +26,7 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT * FROM receipts");
-        return view('receipts.index')->with('receipts', $query);
+        return view('receipts.index')->with('receipts', Receipt::all());
     }
 
     /**
@@ -53,11 +52,9 @@ class ReceiptController extends Controller
             'date_paid' => ['required'],
         ]);
 
-        DB::insert("INSERT INTO receipts (`sum`, paid, date_paid, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())", [
-            $request->input('sum'),
-            $request->input('paid') == 1 ? 1 : 0,
-            $request->input('date_paid')
-        ]);
+        $request->paid = $request->paid == 1 ? 1 : 0;
+
+        Receipt::create($request->all());
 
         return redirect('/receipts')->with('success', "Receipt created");
     }
@@ -81,8 +78,7 @@ class ReceiptController extends Controller
      */
     public function edit(Receipt $receipt)
     {
-        $query = DB::select("SELECT * FROM receipts WHERE id = ?", [$receipt->id])[0];
-        return view('receipts.edit')->with('receipt', compact('query')['query']);
+        return view('receipts.edit')->with('receipt', $receipt);
     }
 
     /**
@@ -99,14 +95,8 @@ class ReceiptController extends Controller
             'date_paid' => ['required']
         ]);
 
-        $query = DB::update("UPDATE receipts SET `sum` = ?, paid = ?, date_paid = ? WHERE id = ?", [
-            $request->input('sum'),
-            $request->input('paid') == 1 ? 1 : 0,
-            $request->input('date_paid'),
-            $receipt->id
-            ]);
-
-        return redirect('/receipts')->with('success', "Receipt updated");
+        $bSuccess = $receipt->update();
+        return redirect('/receipts')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Receipt updated' : 'Failed to update receipt');
     }
 
     /**
@@ -117,13 +107,13 @@ class ReceiptController extends Controller
      */
     public function destroy(Receipt $receipt)
     {
-        DB::delete("DELETE FROM receipts WHERE id = ?", [$receipt->id]);
+        $receipt->delete();
         return redirect('/receipts')->with('success', 'Receipt deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM receipts WHERE id = ?", [$id]);
+        Receipt::destroy($id);
         return redirect('/receipts')->with('success', 'Receipt deleted');
     }
 }

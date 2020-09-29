@@ -20,7 +20,7 @@
             {{Form::time('closing_time', $shop->closing_time, ['class' => 'form-control'])}}
 
             {{Form::label('search_box', 'Department')}}
-            {{Form::text('search_box', $department_address, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('shops.search'), 'data-updatefield' => 'departmentID', 'required'])}}
+            {{Form::text('search_box', $shop->department_address, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('shops.search'), 'data-updatefield' => 'departmentID', 'required'])}}
             {{Form::hidden('department_id', $shop->department, ['id' => 'departmentID'])}}
         </div>
         {{Form::hidden('_method', 'PUT')}}

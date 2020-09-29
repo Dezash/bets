@@ -20,9 +20,8 @@ class EmployeesController extends Controller
      */
     public function index()
     {
-        // $employees = Employee::all();
-        $query = DB::select("SELECT * FROM employees");
-        return view('employees.index')->with('employees', $query);
+        $employees = Employee::all();
+        return view('employees.index')->with('employees', $employees);
     }
 
     /**
@@ -49,17 +48,7 @@ class EmployeesController extends Controller
             'birth_date' => 'required'
         ]);
 
-        /*$employee = new Employee();
-        $employee->first_name = $request->input('first_name');
-        $employee->last_name = $request->input('last_name');
-        $employee->birth_date = $request->input('birth_date');
-        $employee->save();*/
-
-        DB::insert("INSERT INTO employees (first_name, last_name, birth_date, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())", [
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('birth_date')
-        ]);
+        Employee::create($request->all());
 
         return redirect('/employees')->with('success', "Employee created");
     }
@@ -72,13 +61,8 @@ class EmployeesController extends Controller
      */
     public function show($id)
     {
-        $query = DB::select("SELECT * FROM employees WHERE id = ?", [$id])[0];
-        $object = compact('query')['query'];
-        $object->created_at = \Carbon\Carbon::parse($object->created_at)->format('Y-m-d');
-
-        return view('employees.show')->with('employee', compact('query')['query']);
-        // $employee = Employee::fromArray($query);
-        // return view('employees.show')->with('employee', $employee);
+        $employee = Employee::find($id);
+        return view('employees.show')->with('employee', $employee);
     }
 
     /**
@@ -89,11 +73,8 @@ class EmployeesController extends Controller
      */
     public function edit($id)
     {
-        $query = DB::select("SELECT * FROM employees WHERE id = ?", [$id])[0];
-        $object = compact('query')['query'];
-        $object->created_at = \Carbon\Carbon::parse($object->created_at)->format('Y-m-d');
-
-        return view('employees.edit')->with('employee', compact('query')['query']);
+        $employee = Employee::find($id);
+        return view('employees.edit')->with('employee', $employee);
     }
 
     /**
@@ -103,7 +84,7 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Employee $employee)
     {
         $this->validate($request, [
             'first_name' => 'required',
@@ -112,12 +93,7 @@ class EmployeesController extends Controller
             'created_at' => 'required'
         ]);
 
-        $query = DB::update("UPDATE employees SET first_name = ?, last_name = ?, birth_date = ?, created_at = ? WHERE id = ?", [
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('birth_date'),
-            $request->input('created_at'),
-            $id]);
+        $employee->update($request->all());
 
         return redirect('/employees')->with('success', "Employee updated");
     }
@@ -128,15 +104,15 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
-        DB::delete("DELETE FROM employees WHERE id = ?", [$id]);
+        $employee->delete();
         return redirect('/employees')->with('success', 'Employee deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM employees WHERE id = ?", [$id]);
+        Employee::destroy($id);
         return redirect('/employees')->with('success', 'Employee deleted');
     }
 }

@@ -25,8 +25,8 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT shops.*, cities.name AS city_name FROM shops INNER JOIN cities ON cities.id = shops.city_id");
-        return view('shops.index')->with('shops', $query);
+        $shops = Shop::select('shops.*', 'cities.name AS city_name', 'depShop.address AS department_address')->join('cities', 'cities.id', '=', 'shops.city_id')->leftJoin('shops AS depShop', 'depShop.id', '=', 'shops.department')->get();
+        return view('shops.index')->with('shops', $shops);
     }
 
     /**
@@ -57,15 +57,7 @@ class ShopController extends Controller
             'department_id' => ['numeric']
         ]);
 
-        DB::insert("INSERT INTO shops (city_id, `address`, phone, email, opening_time, closing_time, department, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())", [
-            $request->input('city_id'),
-            $request->input('address'),
-            $request->input('phone'),
-            $request->input('email'),
-            $request->input('opening_time'),
-            $request->input('closing_time'),
-            $request->input('department_id')
-        ]);
+        Shop::create($request->all());
 
         return redirect('/shops')->with('success', "Shop created");
     }
@@ -89,15 +81,8 @@ class ShopController extends Controller
      */
     public function edit(Shop $shop)
     {
-        $query = DB::select("SELECT shops.*, cities.name AS city_name FROM shops INNER JOIN cities ON shops.city_id = cities.id WHERE shops.id = ?", [$shop->id])[0];
-        $department_address = '';
-        if (isset($query->department))
-        {
-            $query2 = DB::select("SELECT `address` FROM shops WHERE id = ?", [$shop->department])[0];
-            $department_address = $query2->address;
-        }
-        
-        return view('shops.edit')->with('shop', compact('query')['query'])->with('department_address', $department_address);
+        $shop = Shop::select('shops.*', 'cities.name AS city_name', 'depShop.address AS department_address')->join('cities', 'shops.city_id', '=', 'cities.id')->leftJoin('shops AS depShop', 'depShop.id', '=', 'shops.department')->where('shops.id', $shop->id)->first();
+        return view('shops.edit')->with('shop', $shop);
     }
 
     /**
@@ -119,16 +104,7 @@ class ShopController extends Controller
             'department_id' => ['numeric']
         ]);
 
-        $query = DB::update("UPDATE shops SET city_id = ?, `address` = ?, phone = ?, email = ?, opening_time = ?, closing_time = ?, department = ? WHERE id = ?", [
-            $request->input('city_id'),
-            $request->input('address'),
-            $request->input('phone'),
-            $request->input('email'),
-            $request->input('opening_time'),
-            $request->input('closing_time'),
-            $request->input('department_id'),
-            $shop->id
-            ]);
+        $shop->update($request->all());
 
         return redirect('/shops')->with('success', "Shop updated");
     }
@@ -141,13 +117,13 @@ class ShopController extends Controller
      */
     public function destroy(Shop $shop)
     {
-        DB::delete("DELETE FROM shops WHERE id = ?", [$shop->id]);
+        $shop->delete();
         return redirect('/shops')->with('success', 'Shop deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM shops WHERE id = ?", [$id]);
+        Shop::destroy($id);
         return redirect('/shops')->with('success', 'Shop deleted');
     }
 
@@ -158,13 +134,11 @@ class ShopController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $shops = DB::select('SELECT id, `address` FROM shops ORDER BY `address` ASC LIMIT 5');
+           $shops = Shop::select('id', 'address')->orderBy('address')->limit(5)->get();
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $shops = DB::select("SELECT id, `address` FROM shops WHERE `address` LIKE ? ORDER BY `address` ASC LIMIT 5", ['%' . $search . '%']);
+           $shops = Shop::select('id', 'address')->where('address', 'like', '%' . $search . '%')->orderBy('address')->limit(5)->get();
         }
   
         $response = array();

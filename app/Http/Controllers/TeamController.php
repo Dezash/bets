@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Team;
+use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,8 +27,8 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT teams.*, leagues.name AS league_name FROM teams INNER JOIN leagues ON teams.league_id = leagues.id");
-        return view('teams.index')->with('teams', $query);
+        $teams = Team::select('teams.*', 'leagues.name AS league_name')->join('leagues', 'teams.league_id', '=', 'leagues.id')->get();
+        return view('teams.index')->with('teams', $teams);
     }
 
     /**
@@ -61,20 +62,16 @@ class TeamController extends Controller
 
         $this->validate($request, $rules);
 
-        DB::insert("INSERT INTO teams (`name`, league_id, created_at, updated_at) VALUES (?, ?, NOW(), NOW())", [
-            $request->input('name'),
-            $request->input('league_id')
-        ]);
-
-        $query = DB::select("SELECT LAST_INSERT_ID() AS team_id;")[0];
+        $team = Team::create($request->all());
 
         foreach($request->first_name as $key => $value){
-            DB::insert("INSERT INTO players (team_id, first_name, last_name, country, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())", [
-                $query->team_id,
-                $value,
-                $request->last_name[$key],
-                $request->country[$key]
+            Player::create([
+                'team_id' => $team->id,
+                'first_name' => $value,
+                'last_name' => $request->last_name[$key],
+                'country' => $request->country[$key]
             ]);
+
         }
 
         return redirect('/teams')->with('success', "Team created");
@@ -99,8 +96,8 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        $query = DB::select("SELECT teams.*, leagues.name AS league_name FROM teams INNER JOIN leagues ON teams.league_id = leagues.id WHERE teams.id = ?", [$team->id])[0];
-        return view('teams.edit')->with('team', compact('query')['query']);
+        $team = Team::select('teams.*', 'leagues.name AS league_name')->join('leagues', 'teams.league_id', '=', 'leagues.id')->where('teams.id', $team->id)->get();
+        return view('teams.edit')->with('team', $team);
     }
 
     /**
@@ -117,13 +114,8 @@ class TeamController extends Controller
             'league_id' => ['required', 'numeric']
         ]);
 
-        $query = DB::update("UPDATE teams SET `name` = ?, league_id = ? WHERE id = ?", [
-            $request->input('name'),
-            $request->input('league_id'),
-            $team->id
-            ]);
-
-        return redirect('/teams')->with('success', "Team updated");
+        $bSuccess = $team->update($request->all());
+        return redirect('/teams')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Team updated' : 'Failed to update team');
     }
 
     /**
@@ -134,13 +126,13 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        DB::delete("DELETE FROM teams WHERE id = ?", [$team->id]);
+        $team->delete();
         return redirect('/teams')->with('success', 'Team deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM teams WHERE id = ?", [$id]);
+        Team::destroy($id);
         return redirect('/teams')->with('success', 'Team deleted');
     }
 
@@ -151,13 +143,11 @@ class TeamController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $teams = DB::select('SELECT id, `name` FROM teams ORDER BY `name` ASC LIMIT 5');
+            $teams = Team::select('id', 'name')->orderBy('name')->limit(5)->get();
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $teams = DB::select("SELECT id, `name` FROM teams WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+            $teams = Team::select('id', 'name')->where('name', 'like', '%' . $search . '%')->orderBy('name')->limit(5)->get();
         }
   
         $response = array();

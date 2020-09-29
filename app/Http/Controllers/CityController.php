@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CityController extends Controller
 {
@@ -21,8 +22,8 @@ class CityController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT * FROM cities");
-        return view('cities.index')->with('cities', $query);
+        $cities = City::all();
+        return view('cities.index')->with('cities', $cities);
     }
 
     /**
@@ -47,9 +48,7 @@ class CityController extends Controller
             'name' => ['required']
         ]);
 
-        DB::insert("INSERT INTO cities (`name`, created_at, updated_at) VALUES (?, NOW(), NOW())", [
-            $request->input('name')
-        ]);
+        City::create($request->all());
 
         return redirect('/cities')->with('success', "City created");
     }
@@ -73,8 +72,8 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
-        $query = DB::select("SELECT * FROM cities WHERE id = ?", [$city->id])[0];
-        return view('cities.edit')->with('city', compact('query')['query']);
+        $city = City::find($city->id);
+        return view('cities.edit')->with('city', $city);
     }
 
     /**
@@ -90,10 +89,7 @@ class CityController extends Controller
             'name' => ['required']
         ]);
 
-        $query = DB::update("UPDATE cities SET `name` = ? WHERE id = ?", [
-            $request->input('name'),
-            $city->id
-            ]);
+        $city->update($request->all());
 
         return redirect('/cities')->with('success', "City updated");
     }
@@ -106,13 +102,14 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
-        DB::delete("DELETE FROM cities WHERE id = ?", [$city->id]);
+        $city->delete();
+        //DB::delete("DELETE FROM cities WHERE id = ?", [$city->id]);
         return redirect('/cities')->with('success', 'City deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM cities WHERE id = ?", [$id]);
+        City::destroy($id);
         return redirect('/cities')->with('success', 'City deleted');
     }
 
@@ -123,13 +120,11 @@ class CityController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $cities = DB::select('SELECT id, `name` FROM cities ORDER BY `name` ASC LIMIT 5');
+            $cities = City::select("id", "name")->orderBy("name")->take(5);
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $cities = DB::select("SELECT id, `name` FROM cities WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+            $cities = City::select("id", "name")->where("name", "like", '%' . $search . '%')->orderBy("name")->take(5);
         }
   
         $response = array();

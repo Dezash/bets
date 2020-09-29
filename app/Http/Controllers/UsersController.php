@@ -26,7 +26,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = DB::select("SELECT * FROM users");
+        $users = User::all();
         return view('users.index')->with('users', $users)->with('payment_types', config('enums.payment_types'));
     }
 
@@ -38,8 +38,8 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $query = DB::select("SELECT * FROM users WHERE id = ?", [$id])[0];
-        return view('users.show')->with('user', compact('query')['query']);
+        $user = User::find($id);
+        return view('users.show')->with('user', $user);
     }
 
 
@@ -49,10 +49,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        $query = DB::select("SELECT * FROM users WHERE id = ?", [$id])[0];
-        return view('users.edit')->with('user', compact('query')['query']);
+        return view('users.edit')->with('user', $user);
     }
 
 
@@ -63,7 +62,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
         $this->validate($request, [
             'email' => ['required', 'string', 'email', 'max:255'],
@@ -76,20 +75,8 @@ class UsersController extends Controller
             'payment_type' => ['required', 'numeric', 'min:1', 'max:' . count(config('enums.payment_types'))]
         ]);
 
-        $query = DB::update("UPDATE users SET email = ?, personal_code = ?, first_name = ?, last_name = ?, phone = ?, birth_date = ?, bank_account = ?, payment_type = ?, confirmed = ? WHERE id = ?", [
-            $request->input('email'),
-            $request->input('personal_code'),
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('phone'),
-            $request->input('birth_date'),
-            $request->input('bank_account'),
-            $request->input('payment_type') + 1,
-            $request->input('confirmed') == 1 ? 1 : 0,
-            $id
-            ]);
-
-        return redirect('/users')->with('success', "User updated");
+        $bSuccess = $user->update($request->all());
+        return redirect('/users')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'User updated' : 'Failed to update user');
     }
 
         /**
@@ -98,15 +85,15 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        DB::delete("DELETE FROM users WHERE id = ?", [$id]);
+        $user->delete();
         return redirect('/users')->with('success', 'User deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM users WHERE id = ?", [$id]);
+        User::destroy($id);
         return redirect('/users')->with('success', 'User deleted');
     }
 
@@ -117,13 +104,11 @@ class UsersController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $users = DB::select('SELECT id, `name` FROM users ORDER BY `name` ASC LIMIT 5');
+           $users = User::select('id', 'name')->orderBy('name')->limit(5)->get();
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $users = DB::select("SELECT id, `name` FROM users WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+           $users = User::select('id', 'name')->where('name', 'like', '%' . $search . '%')->orderBy('name')->limit(5)->get();
         }
   
         $response = array();
