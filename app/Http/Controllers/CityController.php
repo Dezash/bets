@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\City;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class CityController extends Controller
 {
@@ -72,7 +70,6 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
-        $city = City::find($city->id);
         return view('cities.edit')->with('city', $city);
     }
 
@@ -103,7 +100,6 @@ class CityController extends Controller
     public function destroy(City $city)
     {
         $city->delete();
-        //DB::delete("DELETE FROM cities WHERE id = ?", [$city->id]);
         return redirect('/cities')->with('success', 'City deleted');
     }
 
@@ -120,11 +116,11 @@ class CityController extends Controller
   
         if($search == '')
         {
-            $cities = City::select("id", "name")->orderBy("name")->take(5);
+            $cities = City::select("id", "name")->orderBy("name")->limit(5)->get();
         }
         else
         {
-            $cities = City::select("id", "name")->where("name", "like", '%' . $search . '%')->orderBy("name")->take(5);
+            $cities = City::select("id", "name")->where("name", "like", '%' . $search . '%')->orderBy("name")->limit(5)->get();
         }
   
         $response = array();

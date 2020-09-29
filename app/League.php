@@ -12,4 +12,9 @@ class League extends Model
     {
         return $this->belongsTo('App\Sport');
     }
+
+    public function teams()
+    {
+        return $this->hasMany('App\Team');
+    }
 }

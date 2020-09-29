@@ -24,7 +24,7 @@
                 <th>{{$league->wins}}</th>
                 <th>{{$league->losses}}</th>
                 <th>{{$league->ties}}</th>
-                <th>{{$league->sport_name}}</th>
+                <th>{{$league->sport->name}}</th>
                 <th><a href="/leagues/{{$league->id}}/edit">Edit</a></th>
                 <th><a href="/leagues/{{$league->id}}/delete">Delete</a></th>
             </tr>

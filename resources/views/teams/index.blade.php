@@ -17,7 +17,7 @@
         @foreach($teams as $team)
             <tr>
                 <th scope="row">{{$team->id}}</th>
-                <th>{{$team->league_name}}</th>
+                <th>{{$team->league->name}}</th>
                 <th>{{$team->name}}</th>
                 <th><a href="/teams/{{$team->id}}/edit">Edit</a></th>
                 <th><a href="/teams/{{$team->id}}/delete">Delete</a></th>

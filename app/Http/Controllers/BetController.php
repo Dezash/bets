@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Bet;
+use App\Match;
+use App\Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class BetController extends Controller
 {
@@ -26,8 +27,7 @@ class BetController extends Controller
    */
   public function index()
   {
-    $bets = Bet::join("teams", "teams.id", "=", "bets.team_id")->join("users", "users.id", "=", "bets.user_id")->select("bets.*", "teams.name AS team_name", "users.name AS user_name")->get();
-    //$bets = DB::select("SELECT bets.*, teams.name AS team_name, users.name AS user_name FROM bets INNER JOIN teams ON teams.id = bets.team_id INNER JOIN users ON users.id = bets.user_id");
+    $bets = Bet::all();
     return view('bets.index')->with('bets', $bets);
   }
 
@@ -38,7 +38,9 @@ class BetController extends Controller
    */
   public function create()
   {
-    return view('bets.create');
+    $matches = Match::pluck('id', 'id');
+    $receipts = Receipt::pluck('id', 'id');
+    return view('bets.create')->with('matches', $matches)->with('receipts', $receipts);
   }
 
   /**
@@ -80,8 +82,9 @@ class BetController extends Controller
    */
   public function edit(Bet $bet)
   {
-    $bet = Bet::join("teams", "teams.id", "=", "bets.team_id")->join("users", "users.id", "=", "bets.user_id")->where("bets.id", $bet->id)->select("bets.*", "teams.name AS team_name", "users.name AS user_name")->first();
-    return view('bets.edit')->with('bet', $bet);
+    $matches = Match::all()->pluck('title', 'id');
+    $receipts = Receipt::all()->pluck('title', 'id');
+    return view('bets.edit')->with('bet', $bet)->with('matches', $matches)->with('receipts', $receipts);
   }
 
   /**

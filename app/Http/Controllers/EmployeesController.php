@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Employee;
-use Illuminate\Support\Facades\DB;
 
 class EmployeesController extends Controller
 {
@@ -59,9 +58,8 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Employee $employee)
     {
-        $employee = Employee::find($id);
         return view('employees.show')->with('employee', $employee);
     }
 
@@ -71,9 +69,8 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Employee $employee)
     {
-        $employee = Employee::find($id);
         return view('employees.edit')->with('employee', $employee);
     }
 

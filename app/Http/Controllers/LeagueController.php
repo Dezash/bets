@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\League;
 use App\Team;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LeagueController extends Controller
 {
@@ -27,7 +26,7 @@ class LeagueController extends Controller
      */
     public function index()
     {
-        $leagues = League::select("leagues.*", "sports.name AS sport_name")->join("sports", "leagues.sport_id", "=", "sports.id")->get();
+        $leagues = League::all();
         return view('leagues.index')->with('leagues', $leagues);
     }
 
@@ -101,7 +100,6 @@ class LeagueController extends Controller
      */
     public function edit(League $league)
     {
-        $league = League::select("leagues.*", "sports.name AS sport_name")->join("sports", "leagues.sport_id", "=", "sports.id")->where("leagues.id", $league->id)->first();
         return view('leagues.edit')->with('league', $league);
     }
 

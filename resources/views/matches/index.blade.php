@@ -22,9 +22,9 @@
                 <th scope="row">{{$match->id}}</th>
                 <th>{{$match->match_start}}</th>
                 <th>{{$match->match_end}}</th>
-                <th>{{$match->first_team_name}} [{{$match->first_team_score}}]</th>
-                <th>{{$match->second_team_name}} [{{$match->second_team_score}}]</th>
-                <th>{{isset($match->is_tie) ? ($match->is_tie == 1 ? 'Tie' : $match->winning_team_name) : ''}}</th>
+                <th>{{$match->firstTeam->name}} [{{$match->first_team_score}}]</th>
+                <th>{{$match->secondTeam->name}} [{{$match->second_team_score}}]</th>
+                <th>{{isset($match->is_tie) ? ($match->is_tie == 1 ? 'Tie' : $match->winningTeam->name) : ''}}</th>
                 <th><a href="/matches/{{$match->id}}/edit">Edit</a></th>
                 <th><a href="/matches/{{$match->id}}/delete">Delete</a></th>
             </tr>

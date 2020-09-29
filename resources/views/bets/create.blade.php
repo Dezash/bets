@@ -5,9 +5,9 @@
     {{ Form::open(['action' => 'BetController@store', 'method' => 'POST']) }}
         <div class="form-group">
             {{Form::label('match_id', "Match ID")}}
-            {{Form::number('match_id', '', ['class' => 'form-control', 'required'])}}
+            {{Form::select('match_id', $matches, null, ['class' => 'form-control', 'required'])}}
             {{Form::label('receipt_id', "Receipt ID")}}
-            {{Form::number('receipt_id', '', ['class' => 'form-control', 'required'])}}
+            {{Form::select('receipt_id', $receipts, null, ['class' => 'form-control', 'required'])}}
 
             {{Form::label('team_name', 'Team')}}
             {{Form::text('team_name', '', ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'teamID', 'required'])}}

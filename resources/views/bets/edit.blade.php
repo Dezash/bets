@@ -6,16 +6,16 @@
     {{ Form::open(['action' => ['BetController@update', $bet->id], 'method' => 'POST']) }}
         <div class="form-group">
             {{Form::label('match_id', "Match ID")}}
-            {{Form::number('match_id', $bet->match_id, ['class' => 'form-control', 'required'])}}
+            {{Form::select('match_id', $matches, null, ['class' => 'form-control', 'required'])}}
             {{Form::label('receipt_id', "Receipt ID")}}
-            {{Form::number('receipt_id', $bet->receipt_id, ['class' => 'form-control', 'required'])}}
+            {{Form::select('receipt_id', $receipts, null, ['class' => 'form-control', 'required'])}}
 
             {{Form::label('team_name', 'Team')}}
-            {{Form::text('team_name', $bet->team_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'teamID', 'required'])}}
+            {{Form::text('team_name', $bet->team->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('teams.search'), 'data-updatefield' => 'teamID', 'required'])}}
             {{Form::hidden('team_id', $bet->team_id, ['id' => 'teamID'])}}
 
             {{Form::label('user_name', 'User')}}
-            {{Form::text('user_name', $bet->user_name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('users.search'), 'data-updatefield' => 'userID', 'required'])}}
+            {{Form::text('user_name', $bet->user->name, ['class' => 'form-control search', 'placeholder' => 'Search', 'data-route' => route('users.search'), 'data-updatefield' => 'userID', 'required'])}}
             {{Form::hidden('user_id', $bet->user_id, ['id' => 'userID'])}}
 
             {{Form::label('bet_sum', "Sum")}}
