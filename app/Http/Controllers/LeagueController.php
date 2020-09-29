@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\League;
+use App\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,8 +27,8 @@ class LeagueController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT leagues.*, sports.name AS sport_name FROM leagues INNER JOIN sports ON leagues.sport_id = sports.id");
-        return view('leagues.index')->with('leagues', $query);
+        $leagues = League::select("leagues.*", "sports.name AS sport_name")->join("sports", "leagues.sport_id", "=", "sports.id")->get();
+        return view('leagues.index')->with('leagues', $leagues);
     }
 
     /**
@@ -56,27 +57,26 @@ class LeagueController extends Controller
             'sport_id' => ['required', 'numeric']
         ];
 
-        foreach($request->teamname as $key => $value){
-            $rules["teamname.{$key}"] = 'required';
+
+        if(isset($request->teamname))
+        {
+            foreach($request->teamname as $key => $value){
+                $rules["teamname.{$key}"] = 'required';
+            }
         }
 
         $this->validate($request, $rules);
 
-        DB::insert("INSERT INTO leagues (`name`, wins, losses, ties, sport_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())", [
-            $request->input('name'),
-            $request->input('wins'),
-            $request->input('losses'),
-            $request->input('ties'),
-            $request->input('sport_id')
-        ]);
+        $league = League::create($request->all());
 
-        $query = DB::select("SELECT LAST_INSERT_ID() AS league_id;")[0];
-
-        foreach($request->teamname as $key => $value){
-            DB::insert("INSERT INTO teams (`league_id`, `name`, created_at, updated_at) VALUES (?, ?, NOW(), NOW())", [
-                $query->league_id,
-                $value
-            ]);
+        if(isset($request->teamname))
+        {
+            foreach($request->teamname as $key => $value){
+                Team::create([
+                    'league_id' => $league->league_id,
+                    'name' => $value
+                ]);
+            }
         }
 
         return redirect('/leagues')->with('success', "League created");
@@ -101,8 +101,8 @@ class LeagueController extends Controller
      */
     public function edit(League $league)
     {
-        $query = DB::select("SELECT leagues.*, sports.name AS sport_name FROM leagues INNER JOIN sports ON leagues.sport_id = sports.id WHERE leagues.id = ?", [$league->id])[0];
-        return view('leagues.edit')->with('league', compact('query')['query']);
+        $league = League::select("leagues.*", "sports.name AS sport_name")->join("sports", "leagues.sport_id", "=", "sports.id")->where("leagues.id", $league->id)->first();
+        return view('leagues.edit')->with('league', $league);
     }
 
     /**
@@ -122,14 +122,7 @@ class LeagueController extends Controller
             'sport_id' => ['required', 'numeric']
         ]);
 
-        $query = DB::update("UPDATE leagues SET `name` = ?, wins = ?, losses = ?, ties = ?, sport_id = ? WHERE id = ?", [
-            $request->input('name'),
-            $request->input('wins'),
-            $request->input('losses'),
-            $request->input('ties'),
-            $request->input('sport_id'),
-            $league->id
-            ]);
+        $league->update($request->all());
 
         return redirect('/leagues')->with('success', "League updated");
     }
@@ -142,13 +135,13 @@ class LeagueController extends Controller
      */
     public function destroy(League $league)
     {
-        DB::delete("DELETE FROM leagues WHERE id = ?", [$league->id]);
+        $league->delete();
         return redirect('/leagues')->with('success', 'League deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM leagues WHERE id = ?", [$id]);
+        League::destroy($id);
         return redirect('/leagues')->with('success', 'League deleted');
     }
 
@@ -159,13 +152,11 @@ class LeagueController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $leagues = DB::select('SELECT id, `name` FROM leagues ORDER BY `name` ASC LIMIT 5');
+            $leagues = League::orderBy('name')->limit(5)->get();
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $leagues = DB::select("SELECT id, `name` FROM leagues WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+           $leagues = League::where('name', 'like', '%' . $search . '%')->orderBy('name')->limit(5)->get();
         }
   
         $response = array();

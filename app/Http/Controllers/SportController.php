@@ -26,8 +26,7 @@ class SportController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT * FROM sports");
-        return view('sports.index')->with('sports', $query);
+        return view('sports.index')->with('sports', Sport::all());
     }
 
     /**
@@ -52,9 +51,7 @@ class SportController extends Controller
             'name' => ['required']
         ]);
 
-        DB::insert("INSERT INTO sports (`name`, created_at, updated_at) VALUES (?, NOW(), NOW())", [
-            $request->input('name')
-        ]);
+        Sport::create($request->all());
 
         return redirect('/sports')->with('success', "Sport created");
     }
@@ -78,8 +75,7 @@ class SportController extends Controller
      */
     public function edit(Sport $sport)
     {
-        $query = DB::select("SELECT * FROM sports WHERE id = ?", [$sport->id])[0];
-        return view('sports.edit')->with('sport', compact('query')['query']);
+        return view('sports.edit')->with('sport', $sport);
     }
 
     /**
@@ -95,12 +91,9 @@ class SportController extends Controller
             'name' => ['required']
         ]);
 
-        $query = DB::update("UPDATE sports SET `name` = ? WHERE id = ?", [
-            $request->input('name'),
-            $sport->id
-            ]);
+        $bSuccess = $sport->update($request->all());
 
-        return redirect('/sports')->with('success', "Sport updated");
+        return redirect('/sports')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Sport updated' : 'Error while updating sport');
     }
 
     /**
@@ -111,13 +104,13 @@ class SportController extends Controller
      */
     public function destroy(Sport $sport)
     {
-        DB::delete("DELETE FROM sports WHERE id = ?", [$sport->id]);
+        $sport->delete();
         return redirect('/sports')->with('success', 'Sport deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM sports WHERE id = ?", [$id]);
+        Sport::destroy($id);
         return redirect('/sports')->with('success', 'Sport deleted');
     }
 
@@ -128,13 +121,11 @@ class SportController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $sports = DB::select('SELECT id, `name` FROM sports ORDER BY `name` ASC LIMIT 5');
+           $sports = Sport::select('id', 'name')->orderBy('name')->limit(5)->get();
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $sports = DB::select("SELECT id, `name` FROM sports WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+           $sports = Sport::select('id', 'name')->where('name', 'like', '%' . $search . '%')->orderBy('name')->limit(5)->get();
         }
   
         $response = array();

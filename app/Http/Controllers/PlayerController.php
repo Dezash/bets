@@ -26,8 +26,8 @@ class PlayerController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT players.*, teams.name AS team_name FROM players INNER JOIN teams ON players.team_id = teams.id");
-        return view('players.index')->with('players', $query);
+        $players = Player::select('players.*', 'teams.name AS team_name')->join('teams', 'players.team_id', '=', 'teams.id')->get();
+        return view('players.index')->with('players', $players);
     }
 
     /**
@@ -54,14 +54,9 @@ class PlayerController extends Controller
             'last_name' => ['required'],
             'country' => ['required']
         ]);
+        
+        Player::create($request->all());
     
-        DB::insert("INSERT INTO players (team_id, first_name, last_name, country, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())", [
-            $request->input('team_id'),
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('country')
-        ]);
-
         return redirect('/players')->with('success', "Player created");
     }
 
@@ -84,8 +79,7 @@ class PlayerController extends Controller
      */
     public function edit(Player $player)
     {
-        $query = DB::select("SELECT players.*, teams.name AS team_name FROM players INNER JOIN teams ON players.team_id = teams.id WHERE players.id = ?", [$player->id])[0];
-        return view('players.edit')->with('player', compact('query')['query']);
+        return view('players.edit')->with('player', $player);
     }
 
     /**
@@ -104,15 +98,9 @@ class PlayerController extends Controller
             'country' => ['required', 'string']
         ]);
 
-        $query = DB::update("UPDATE players SET team_id = ?, first_name = ?, last_name = ?, country = ? WHERE id = ?", [
-            $request->input('team_id'),
-            $request->input('first_name'),
-            $request->input('last_name'),
-            $request->input('country'),
-            $player->id
-            ]);
+        $bSuccess = $player->update($request->all());
 
-        return redirect('/players')->with('success', "Player updated");
+        return redirect('/players')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Player updated' : 'Failed to update player');
     }
 
     /**
@@ -123,13 +111,13 @@ class PlayerController extends Controller
      */
     public function destroy(Player $player)
     {
-        DB::delete("DELETE FROM players WHERE id = ?", [$player->id]);
+        $player->delete();
         return redirect('/players')->with('success', 'Player deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM players WHERE id = ?", [$id]);
+        Player::destroy($id);
         return redirect('/players')->with('success', 'Player deleted');
     }
 }

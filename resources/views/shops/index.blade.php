@@ -28,16 +28,7 @@
                 <th>{{$shop->email}}</th>
                 <th>{{$shop->opening_time}}</th>
                 <th>{{$shop->closing_time}}</th>
-                @if(isset($shop->department))
-                    @foreach($shops as $theShop)
-                        @if($theShop->id == $shop->department)
-                            <th>{{$theShop->address}}</th>
-                            @break
-                        @endif
-                    @endforeach
-                @else
-                    <th>N/A</th>
-                @endif
+                <th>{{$shop->department_address ?? "N/A"}}</th>
                 
                 <th><a href="/shops/{{$shop->id}}/edit">Edit</a></th>
                 <th><a href="/shops/{{$shop->id}}/delete">Delete</a></th>

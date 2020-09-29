@@ -8,20 +8,11 @@ class Employee extends Model
 {
     public function getCreatedAtAttribute($value)
     {
-        return $value->todatestring();
+        return \Carbon\Carbon::parse($value)->format('Y-m-d');
+        //return $value->todatestring();
     }
 
-
-    // protected $dates = [
-    //     'birth_date'
-    // ];
-
-    // public function __construct(\stdClass $data)
-    // {
-    //     foreach ($data as $key => $value) {
-    //         $this->$key = $value;
-    //     }
-    // }
+    protected $fillable = ['first_name', 'last_name', 'birth_date'];
 
     public static function fromArray($data)
     {

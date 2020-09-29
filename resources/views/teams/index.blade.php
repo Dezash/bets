@@ -3,7 +3,7 @@
 @section('content')
     <h1>Teams</h1>
     <a href="/teams/create" class="btn btn-primary float-right">New team</a>
-    @if(count($teams) > 0)
+
     <table class="table">
         <thead>
             <tr>
@@ -25,7 +25,5 @@
         @endforeach
         </tbody>
     </table>
-    @else
-        <p>No team records found</p>
-    @endif
+
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Match;
+use App\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,16 +26,16 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT matches.*, f_t.name AS first_team_name, s_t.name AS second_team_name FROM matches JOIN teams f_t ON f_t.id = first_team JOIN teams s_t ON s_t.id = second_team");
-        foreach($query as $team)
+        $matches = Match::select("matches.*", "f_t.name AS first_team_name", "s_t.name AS second_team_name")->join("teams AS f_t", "f_t.id", "=", "first_team")->join("teams AS s_t", "s_t.id", "=", "second_team")->get();
+        foreach($matches as $team)
         {
             if (isset($team->winning_team))
             {
-                $team->winning_team_name = DB::select('SELECT `name` FROM teams WHERE id = ?', [$team->winning_team])[0]->name;
+                $team->winning_team_name = Team::select('name')->where('id', $team->winning_team)->get()[0]->name;
             }
         }
 
-        return view('matches.index')->with('matches', $query);
+        return view('matches.index')->with('matches', $matches);
     }
 
     /**
@@ -62,12 +63,7 @@ class MatchController extends Controller
             'second_team' => ['required', 'numeric']
         ]);
 
-        DB::insert("INSERT INTO matches (match_start, match_end, first_team, second_team, first_team_score, second_team_score, created_at, updated_at) VALUES (?, ?, ?, ?, 0, 0, NOW(), NOW())", [
-            $request->input('match_start'),
-            $request->input('match_end'),
-            $request->input('first_team'),
-            $request->input('second_team')
-        ]);
+        Match::create($request->all());
 
         return redirect('/matches')->with('success', "Match created");
     }
@@ -91,9 +87,9 @@ class MatchController extends Controller
      */
     public function edit(Match $match)
     {
-        $query = DB::select("SELECT matches.*, f_t.name AS first_team_name, s_t.name AS second_team_name FROM matches JOIN teams f_t ON f_t.id = first_team JOIN teams s_t ON s_t.id = second_team WHERE matches.id = ?", [$match->id]);
+        $obMatch = Match::select('matches.*', 'f_t.name AS first_team_name', 's_t.name AS second_team_name')->join('teams AS f_t', 'f_t.id', '=', 'first_team')->join('teams AS s_t', 's_t.id', '=', 'second_team')->where('matches.id', $match->id)->first();
 
-        return view('matches.edit')->with('match', $query[0]);
+        return view('matches.edit')->with('match', $obMatch);
     }
 
     /**
@@ -114,17 +110,9 @@ class MatchController extends Controller
             'second_team_score' => ['required', 'numeric']
         ]);
 
-        $query = DB::update("UPDATE matches SET match_start = ?, match_end = ?, first_team = ?, second_team = ?, first_team_score = ?, second_team_score = ? WHERE id = ?", [
-            $request->input('match_start'),
-            $request->input('match_end'),
-            $request->input('first_team'),
-            $request->input('second_team'),
-            $request->input('first_team_score'),
-            $request->input('second_team_score'),
-            $match->id
-            ]);
+        $bSuccess = $match->update($request->all());
 
-        return redirect('/matches')->with('success', "Match updated");
+        return redirect('/matches')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Match updated' : 'Error while updating the match');
     }
 
     /**
@@ -135,13 +123,13 @@ class MatchController extends Controller
      */
     public function destroy(Match $match)
     {
-        DB::delete("DELETE FROM matches WHERE id = ?", [$match->id]);
+        $match->delete();
         return redirect('/matches')->with('success', 'Match deleted');
     }
 
     public function delete($id)
     {
-        DB::delete("DELETE FROM matches WHERE id = ?", [$id]);
+        Match::destroy($id);
         return redirect('/matches')->with('success', 'Match deleted');
     }
 
@@ -151,13 +139,11 @@ class MatchController extends Controller
   
         if($search == '')
         {
-           //$users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-           $matches = DB::select('SELECT id, `name` FROM matches ORDER BY `name` ASC LIMIT 5');
+           $matches = Match::select('id', 'name')->orderBy('name')->limit(5)->get();
         }
         else
         {
-           //$users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
-           $matches = DB::select("SELECT id, `name` FROM matches WHERE `name` LIKE ? ORDER BY `name` ASC LIMIT 5", ['%' . $search . '%']);
+           $matches = Match::select('id', 'name')->where('name', 'like', '%' . $search . '%')->orderBy('name')->limit(5)->get();
         }
   
         $response = array();
