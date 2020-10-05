@@ -24,7 +24,7 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $matches = Match::all();
+        $matches = Match::paginate(15);
         return view('matches.index')->with('matches', $matches);
     }
 

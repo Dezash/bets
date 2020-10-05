@@ -29,6 +29,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $employees->links() }}
     @else
         <p>Darbuotojo įrašai nerasti</p>
     @endif

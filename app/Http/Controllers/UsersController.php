@@ -25,7 +25,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('users.index')->with('users', User::all())->with('payment_types', config('enums.payment_types'));
+        return view('users.index')->with('users', User::paginate(15))->with('payment_types', config('enums.payment_types'));
     }
 
         /**

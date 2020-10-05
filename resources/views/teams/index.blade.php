@@ -25,5 +25,6 @@
         @endforeach
         </tbody>
     </table>
+    {{ $teams->links() }}
 
 @endsection

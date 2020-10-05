@@ -31,5 +31,6 @@
         @endforeach
         </tbody>
     </table>
+    {{ $leagues->links() }}
 
 @endsection

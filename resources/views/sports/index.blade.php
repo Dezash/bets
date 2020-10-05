@@ -23,6 +23,7 @@
         @endforeach
         </tbody>
     </table>
+    {{ $sports->links() }}
     @else
         <p>No sport records found</p>
     @endif
