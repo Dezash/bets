@@ -94,7 +94,7 @@ class ReceiptController extends Controller
             'date_paid' => ['required']
         ]);
 
-        $bSuccess = $receipt->update();
+        $bSuccess = $receipt->update($request->all());
         return redirect('/receipts')->with($bSuccess ? 'success' : 'error', $bSuccess ? 'Receipt updated' : 'Failed to update receipt');
     }
 
