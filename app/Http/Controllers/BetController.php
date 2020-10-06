@@ -38,8 +38,8 @@ class BetController extends Controller
    */
   public function create()
   {
-    $matches = Match::pluck('id', 'id');
-    $receipts = Receipt::pluck('id', 'id');
+    $matches = Match::all()->pluck('title', 'id');
+    $receipts = Receipt::all()->pluck('title', 'id');
     return view('bets.create')->with('matches', $matches)->with('receipts', $receipts);
   }
 
