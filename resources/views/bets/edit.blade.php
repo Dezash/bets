@@ -5,9 +5,9 @@
     <h1>Edit bet</h1>
     {{ Form::open(['action' => ['BetController@update', $bet->id], 'method' => 'POST']) }}
         <div class="form-group">
-            {{Form::label('match_id', "Match ID")}}
+            {{Form::label('match_id', "Match")}}
             {{Form::select('match_id', $matches, null, ['class' => 'form-control', 'required'])}}
-            {{Form::label('receipt_id', "Receipt ID")}}
+            {{Form::label('receipt_id', "Receipt")}}
             {{Form::select('receipt_id', $receipts, null, ['class' => 'form-control', 'required'])}}
 
             {{Form::label('team_name', 'Team')}}
