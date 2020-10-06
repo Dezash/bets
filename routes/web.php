@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,6 @@ Route::resource('bets', 'BetController', [
 Route::get('/bets/{id}/delete', 'BetController@delete');
 
 Auth::routes();
-
+Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
 Route::get('/home', 'HomeController@index')->name('home');

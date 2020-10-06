@@ -43,5 +43,12 @@
           <a class="nav-link" href="/bets">Bets</a>
         </li>
       </ul>
+      <ul class="navbar-nav ml-auto">
+        @if (Auth::check())
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+        </li>
+        @endif
+      </ul>
     </div>
   </nav>
