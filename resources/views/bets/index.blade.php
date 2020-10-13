@@ -3,7 +3,7 @@
 @section('content')
     <h1>Bets</h1>
     <div class="float-right">
-        <a href="/bets/create" class="btn btn-primary">New bet</a>
+        <a class="btn btn-primary @cannot('create', App\Models\Bet::class) disabled @endcannot" href="/bets/create">New bet</a>
         <a href="/bets/report" class="btn btn-primary">Report</a>
     </div>
     @if(count($bets) > 0)

@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Cities</h1>
-    <a href="/cities/create" class="btn btn-primary float-right">New city</a>
+    <a href="/cities/create" class="btn btn-primary float-right @cannot('create', App\Models\City::class) disabled @endcannot">New city</a>
     @if(count($cities) > 0)
     <table class="table">
         <thead>

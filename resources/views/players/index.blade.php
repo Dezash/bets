@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Players</h1>
-    <a href="/players/create" class="btn btn-primary float-right">New player</a>
+    <a href="/players/create" class="btn btn-primary float-right @cannot('create', App\Models\Player::class) disabled @endcannot">New player</a>
     @if(count($players) > 0)
     <table class="table">
         <thead>

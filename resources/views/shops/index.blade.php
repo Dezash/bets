@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Shops</h1>
-    <a href="/shops/create" class="btn btn-primary float-right">New shop</a>
+    <a href="/shops/create" class="btn btn-primary float-right @cannot('create', App\Models\Shop::class) disabled @endcannot">New shop</a>
     @if(count($shops) > 0)
     <table class="table">
         <thead>

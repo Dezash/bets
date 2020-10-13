@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Leagues</h1>
-    <a href="/leagues/create" class="btn btn-primary float-right">New league</a>
+    <a href="/leagues/create" class="btn btn-primary float-right @cannot('create', App\Models\League::class) disabled @endcannot">New league</a>
 
     <table class="table">
         <thead>

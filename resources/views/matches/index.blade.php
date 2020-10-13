@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Matches</h1>
-    <a href="/matches/create" class="btn btn-primary float-right">New match</a>
+    <a href="/matches/create" class="btn btn-primary float-right @cannot('create', App\Models\Match::class) disabled @endcannot">New match</a>
     @if(count($matches) > 0)
     <table class="table">
         <thead>

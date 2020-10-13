@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Employees</h1>
-    <a href="/employees/create" class="btn btn-primary float-right">New employee</a>
+    <a href="/employees/create" class="btn btn-primary float-right @cannot('create', App\Models\Employee::class) disabled @endcannot">New employee</a>
     @if(count($employees) > 0)
     <table class="table">
         <thead>
