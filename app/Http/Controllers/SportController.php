@@ -14,7 +14,7 @@ class SportController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->authorizeResource(Sport::class, 'sport');
     }
     
 

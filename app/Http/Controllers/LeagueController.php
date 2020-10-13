@@ -15,7 +15,7 @@ class LeagueController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->authorizeResource(League::class, 'league');
     }
 
 
