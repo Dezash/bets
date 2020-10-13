@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Payouts</h1>
-    <a href="/payouts/create" class="btn btn-primary float-right">New payout</a>
+    <a href="/payouts/create" class="btn btn-primary float-right @cannot('create', App\Models\Payout::class) disabled @endcannot">New payout</a>
     @if(count($payouts) > 0)
     <table class="table">
         <thead>

@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Teams</h1>
-    <a href="/teams/create" class="btn btn-primary float-right">New team</a>
+    <a href="/teams/create" class="btn btn-primary float-right @cannot('create', App\Models\Team::class) disabled @endcannot">New team</a>
 
     <table class="table">
         <thead>

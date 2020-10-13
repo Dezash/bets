@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Receipts</h1>
-    <a href="/receipts/create" class="btn btn-primary float-right">New receipt</a>
+    <a href="/receipts/create" class="btn btn-primary float-right @cannot('create', App\Models\Receipt::class) disabled @endcannot">New receipt</a>
     @if(count($receipts) > 0)
     <table class="table">
         <thead>

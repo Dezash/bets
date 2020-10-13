@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Sports</h1>
-    <a href="/sports/create" class="btn btn-primary float-right">New sport</a>
+    <a href="/sports/create" class="btn btn-primary float-right @cannot('create', App\Models\Sport::class) disabled @endcannot">New sport</a>
     @if(count($sports) > 0)
     <table class="table">
         <thead>
