@@ -12,7 +12,7 @@
         </li>
         @endcan
         @can('viewAny', App\Models\User::class)
-        <li class="nav-item {{ Route::is('users.*') ? 'active' : '' }}">
+        <li class="nav-item {{ (Route::is('users.*') && !Route::is('users.users.show')) ? 'active' : '' }}">
           <a class="nav-link" href="/users">Users</a>
         </li>
         @endcan
@@ -69,6 +69,11 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         @if (Auth::check())
+        @can('view', Auth::user(), App\Models\User::class)
+        <li class="nav-item {{ Request::is('users/' . Auth::user()->id) ? 'active' : '' }}">
+        <a class="nav-link" href="{{ '/users/' . Auth::user()->id }}">Profile</a>
+        </li>
+        @endcan
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout') }}">Logout</a>
         </li>
