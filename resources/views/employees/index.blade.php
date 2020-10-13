@@ -2,16 +2,16 @@
 
 @section('content')
     <h1>Employees</h1>
-    <a href="/employees/create" class="btn btn-primary float-right">Naujas darbuotojas</a>
+    <a href="/employees/create" class="btn btn-primary float-right">New employee</a>
     @if(count($employees) > 0)
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Vardas</th>
-                <th scope="col">Pavarde</th>
-                <th scope="col">Gimimo data</th>
-                <th scope="col">Pasamdymo data</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Birth date</th>
+                <th scope="col">Hiring date</th>
             </tr>
         </thead>
 
@@ -23,14 +23,14 @@
                 <th>{{$employee->last_name}}</th>
                 <th>{{$employee->birth_date}}</th>
                 <th>{{date('Y-m-d', strtotime($employee->created_at))}}</th>
-                <th><a href="/employees/{{$employee->id}}/edit">Koreguoti</a></th>
-                <th><a href="/employees/{{$employee->id}}/delete">Trinti</a></th>
+                <th><a href="/employees/{{$employee->id}}/edit">Edit</a></th>
+                <th><a href="/employees/{{$employee->id}}/delete">Delete</a></th>
             </tr>
         @endforeach
         </tbody>
     </table>
     {{ $employees->links() }}
     @else
-        <p>Darbuotojo įrašai nerasti</p>
+        <p>No employee records found</p>
     @endif
 @endsection
