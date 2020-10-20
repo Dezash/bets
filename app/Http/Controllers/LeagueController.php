@@ -72,7 +72,7 @@ class LeagueController extends Controller
         {
             foreach($request->teamname as $key => $value){
                 Team::create([
-                    'league_id' => $league->league_id,
+                    'league_id' => $league->id,
                     'name' => $value
                 ]);
             }
